@@ -36,7 +36,7 @@ public class CreatureToFGXml {
 
         addElement(element, "name", "string", creature.getHeader().getName());
         addElement(element, "type", "string", creature.getHeader().getType());
-        addElement(element, "aura", "string", "");
+        addElement(element, "aura", "string", null);
         addElement(element, "hd", "string", hpsplit[1].substring(1, hpsplit[1].length() - 1));
         addElement(element, "speed", "string", creature.getOffense().getSpeed());
         addElement(element, "ac", "string", creature.getDefense().getArmorClass());
@@ -46,28 +46,27 @@ public class CreatureToFGXml {
         addElement(element, "spacereach", "string", getSpaceReachGroup(creature.getOffense().getSpace(), creature.getOffense().getReach()));
         addElement(element, "specialattacks", "string", creature.getOffense().getSpecialAttacks());
         addElement(element, "senses", "string", creature.getHeader().getSenses());
-        addElement(element, "specialqualities", "string", "foobar");
+        addElement(element, "specialqualities", "string", null);
         addElement(element, "skills", "string", creature.getStatistics().getSkills());
         addElement(element, "feats", "string", creature.getStatistics().getFeats());
-        addElement(element, "environment", "string", "foobar");
-        addElement(element, "organization", "string", "foobar");
-        addElement(element, "treasure", "string", "foobar");
-        addElement(element, "alignment", "string", "foobar");
-        addElement(element, "strength", "string", "foobar");
-        addElement(element, "dexterity", "string", "foobar");
-        addElement(element, "constitution", "string", "foobar");
-        addElement(element, "intelligence", "string", "foobar");
-        addElement(element, "wisdom", "string", "foobar");
-        addElement(element, "charisma", "string", "foobar");
-        addElement(element, "fortitudesave", "string", "foobar");
-        addElement(element, "reflexsave", "string", "foobar");
-        addElement(element, "willsave", "string", "foobar");
+        addElement(element, "environment", "string", null);
+        addElement(element, "organization", "string", null);
+        addElement(element, "alignment", "string", creature.getHeader().getAlignment());
+        addElement(element, "strength", "number", creature.getStatistics().getStrength());
+        addElement(element, "dexterity", "number", creature.getStatistics().getDexterity());
+        addElement(element, "constitution", "number", creature.getStatistics().getConstitution());
+        addElement(element, "intelligence", "number", creature.getStatistics().getIntelligence());
+        addElement(element, "wisdom", "number", creature.getStatistics().getWisdom());
+        addElement(element, "charisma", "number", creature.getStatistics().getCharisma());
+        addElement(element, "fortitudesave", "number", creature.getDefense().getFortitudeSave());
+        addElement(element, "reflexsave", "number", creature.getDefense().getReflexSave());
+        addElement(element, "willsave", "number", creature.getDefense().getWillSave());
         addElement(element, "hp", "number", hpsplit[0]);
-        addElement(element, "init", "string", "foobar");
-        addElement(element, "cr", "string", "foobar");
-        addElement(element, "languages", "string", "foobar");
-        addElement(element, "xp", "string", "foobar");
-        addElement(element, "text", "string", "foobar");
+        addElement(element, "init", "number", creature.getHeader().getInitiative());
+        addElement(element, "cr", "number", creature.getHeader().getChallengeRating());
+        addElement(element, "languages", "string", creature.getStatistics().getLanguages());
+        addElement(element, "xp", "number", creature.getHeader().getExperience());
+        addElement(element, "text", "string", null);
 
         return element;
     }
@@ -167,6 +166,8 @@ public class CreatureToFGXml {
     }
 
     protected static Element addElement(Element parent, String name, String type, String body) {
+        if (body == null || body.isEmpty()) return null;
+
         Document doc = parent.getOwnerDocument();
         Element childElement = doc.createElement(name);
         parent.appendChild(childElement);

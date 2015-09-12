@@ -22,7 +22,8 @@ public class HeaderTest {
 		assertEquals("Frost Drake", header.getName());
         assertEquals("7", header.getChallengeRating());
         assertEquals("3,200", header.getExperience());
-        assertEquals("CE Large dragon (cold)", header.getType());
+		assertEquals("CE", header.getAlignment());
+        assertEquals("Large dragon (cold)", header.getType());
         assertEquals("+5", header.getInitiative());
         assertEquals("darkvision 60 ft., low-light vision, scent, snow vision", header.getSenses());
         assertEquals("+10", header.getPerception());

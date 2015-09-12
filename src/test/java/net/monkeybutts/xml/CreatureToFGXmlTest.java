@@ -59,7 +59,7 @@ public class CreatureToFGXmlTest {
                 "mwk spear +16/+11 (1d8+6/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = CreatureToFGXml.getSingleAttack(melee, false);
+        String result = CreatureToFGXml.getFullAttack(melee, false);
 
         // Assert
         assertEquals("+1 lance +18/+13 (1d8+9/×3) or mwk spear +16/+11 (1d8+6/×3)", result);

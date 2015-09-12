@@ -10,6 +10,7 @@ public class Header extends Section {
     private static final String NAME = "NAME";
     private static final String CR = "CR";
     private static final String XP = "XP";
+    private static final String ALIGNMENT = "ALIGNMENT";
     private static final String TYPE = "TYPE";
     private static final String INITIATIVE = "Init".toUpperCase();
     private static final String SENSES = "Senses".toUpperCase();
@@ -18,6 +19,7 @@ public class Header extends Section {
     private String name;
     private String challengeRating;
     private String experience;
+    private String alignment;
     private String type;
     private String initiative;
     private String senses;
@@ -31,7 +33,8 @@ public class Header extends Section {
         tokenIndexes.add(new TokenIndex(NAME, "", 0));
         tokenIndexes.add(upperInput, CR);
         tokenIndexes.add(upperInput, XP);
-        tokenIndexes.add(new TokenIndex(TYPE, "", indexOfLine(input, 2)));
+        tokenIndexes.add(new TokenIndex(ALIGNMENT, "", indexOfLine(input, 2)));
+        tokenIndexes.add(new TokenIndex(TYPE, "", input.indexOf(' ',indexOfLine(input, 2))+1));
         tokenIndexes.add(upperInput, INITIATIVE);
         tokenIndexes.add(upperInput, SENSES);
         tokenIndexes.add(upperInput, PERCEPTION);
@@ -47,6 +50,8 @@ public class Header extends Section {
                 challengeRating = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(XP)) {
                 experience = getTokenValue(input, tokenIndexes, i);
+            } else if ( tokenIndex.getToken().equals(ALIGNMENT)) {
+                alignment = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(TYPE)) {
                 type = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(INITIATIVE)) {
@@ -82,6 +87,10 @@ public class Header extends Section {
 
     public String getExperience() {
         return experience;
+    }
+
+    public String getAlignment() {
+        return alignment;
     }
 
     public String getType() {
