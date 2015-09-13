@@ -1,43 +1,23 @@
-package net.monkeybutts.xml;
+package com.smiteworks.fantasygrounds;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import net.monkeybutts.creature.Creature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringWriter;
-import java.io.Writer;
-
 /**
  * Created by Stimpyjc on 8/30/2015.
  */
-public class CreatureToFGXml {
-    public static Document createDocument() throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = dbf.newDocumentBuilder();
-
-        return builder.newDocument();
-    }
-
+public class FGCreatureElement extends FGDocument {
     public static Element createFromCreature(Document doc, Creature creature) {
         Element element = doc.createElement(creature.getHeader().getName().replaceAll("\\s+", ""));
         doc.appendChild(element);
 
         addLibraryLinkElement(element, "windowreference", "npc", "..");
 
-        // Hit Points
-        String[] hpsplit = creature.getDefense().getHitPoints().split(" ");
-
-        // Attack
-        String attack = "";
-
         addElement(element, "name", "string", creature.getHeader().getName());
         addElement(element, "type", "string", creature.getHeader().getType());
-        addElement(element, "aura", "string", null);
-        addElement(element, "hd", "string", hpsplit[1].substring(1, hpsplit[1].length() - 1));
+        addElement(element, "aura", "string", creature.getHeader().getAura());
+        addElement(element, "hd", "string", creature.getDefense().getHitDice());
         addElement(element, "speed", "string", creature.getOffense().getSpeed());
         addElement(element, "ac", "string", creature.getDefense().getArmorClass());
         addElement(element, "babgrp", "string", getBaseAttackBonusGroup(creature.getStatistics().getBaseAttack(), creature.getStatistics().getCmb(), creature.getStatistics().getCmd()));
@@ -49,8 +29,9 @@ public class CreatureToFGXml {
         addElement(element, "specialqualities", "string", null);
         addElement(element, "skills", "string", creature.getStatistics().getSkills());
         addElement(element, "feats", "string", creature.getStatistics().getFeats());
-        addElement(element, "environment", "string", null);
-        addElement(element, "organization", "string", null);
+        addElement(element, "environment", "string", creature.getEcology().getEnvironment());
+        addElement(element, "organization", "string", creature.getEcology().getOrganization());
+        addElement(element, "treasure", "string", creature.getEcology().getTreasure());
         addElement(element, "alignment", "string", creature.getHeader().getAlignment());
         addElement(element, "strength", "number", creature.getStatistics().getStrength());
         addElement(element, "dexterity", "number", creature.getStatistics().getDexterity());
@@ -61,7 +42,7 @@ public class CreatureToFGXml {
         addElement(element, "fortitudesave", "number", creature.getDefense().getFortitudeSave());
         addElement(element, "reflexsave", "number", creature.getDefense().getReflexSave());
         addElement(element, "willsave", "number", creature.getDefense().getWillSave());
-        addElement(element, "hp", "number", hpsplit[0]);
+        addElement(element, "hp", "number", creature.getDefense().getHitPoints());
         addElement(element, "init", "number", creature.getHeader().getInitiative());
         addElement(element, "cr", "number", creature.getHeader().getChallengeRating());
         addElement(element, "languages", "string", creature.getStatistics().getLanguages());
@@ -163,47 +144,5 @@ public class CreatureToFGXml {
         }
 
         return fullAttack.trim();
-    }
-
-    protected static Element addElement(Element parent, String name, String type, String body) {
-        if (body == null || body.isEmpty()) return null;
-
-        Document doc = parent.getOwnerDocument();
-        Element childElement = doc.createElement(name);
-        parent.appendChild(childElement);
-
-        childElement.setAttribute("type", type);
-        childElement.appendChild(doc.createTextNode(body));
-
-        return childElement;
-    }
-
-    protected static Element addLibraryLinkElement(Element parent, String type, String className, String recordName) {
-        Document doc = parent.getOwnerDocument();
-        Element childElement = doc.createElement("librarylink");
-        parent.appendChild(childElement);
-
-        childElement.setAttribute("type", type);
-
-        Element classElement = doc.createElement("class");
-        childElement.appendChild(classElement);
-        classElement.appendChild(doc.createTextNode(className));
-
-        Element recordNameElement = doc.createElement("recordname");
-        childElement.appendChild(recordNameElement);
-        recordNameElement.appendChild(doc.createTextNode(recordName));
-
-        return childElement;
-    }
-
-    public static final void prettyPrint(Document xml) throws Exception {
-        OutputFormat format = new OutputFormat(xml);
-        format.setLineWidth(65);
-        format.setIndenting(true);
-        format.setIndent(2);
-        Writer out = new StringWriter();
-        XMLSerializer serializer = new XMLSerializer(out, format);
-        serializer.serialize(xml);
-        System.out.println(out.toString());
     }
 }

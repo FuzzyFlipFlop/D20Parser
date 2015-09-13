@@ -15,6 +15,7 @@ public class Header extends Section {
     private static final String INITIATIVE = "Init".toUpperCase();
     private static final String SENSES = "Senses".toUpperCase();
     private static final String PERCEPTION = "Perception".toUpperCase();
+    private static final String AURA = "Aura".toUpperCase();
 
     private String name;
     private String challengeRating;
@@ -24,6 +25,7 @@ public class Header extends Section {
     private String initiative;
     private String senses;
     private String perception;
+    private String aura;
 
     public void parse(String input) throws Exception {
         input = input.replaceAll("\r\n", "\n");
@@ -38,6 +40,7 @@ public class Header extends Section {
         tokenIndexes.add(upperInput, INITIATIVE);
         tokenIndexes.add(upperInput, SENSES);
         tokenIndexes.add(upperInput, PERCEPTION);
+        tokenIndexes.add(upperInput, AURA);
 
         Collections.sort(tokenIndexes);
 
@@ -60,6 +63,8 @@ public class Header extends Section {
                 senses = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(PERCEPTION)) {
                 perception = getTokenValue(input, tokenIndexes, i);
+            } else if ( tokenIndex.getToken().equals(AURA)) {
+                aura = getTokenValue(input, tokenIndexes, i);
             }
         }
     }
@@ -67,14 +72,6 @@ public class Header extends Section {
     @Override
     protected String getTokenValue(String input, TokenIndexList tokenIndexes, int index) {
         return super.getTokenValue(input, tokenIndexes, index).replaceAll("\\s+", " ").trim();
-    }
-
-    protected int indexOfLine(String input, int line) {
-        int index = 0;
-        for (int i = 0; i < line; i++) {
-            index = input.indexOf('\n', index+1);
-        }
-        return index + 1;
     }
 
     public String getName() {
@@ -107,5 +104,9 @@ public class Header extends Section {
 
     public String getPerception() {
         return perception;
+    }
+
+    public String getAura() {
+        return aura;
     }
 }

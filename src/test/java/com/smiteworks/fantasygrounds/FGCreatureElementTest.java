@@ -1,6 +1,5 @@
-package net.monkeybutts.xml;
+package com.smiteworks.fantasygrounds;
 
-import net.monkeybutts.creature.Creature;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,20 +9,20 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Stimpyjc on 8/30/2015.
  */
-public class CreatureToFGXmlTest {
+public class FGCreatureElementTest {
 
     @Test
     public void testCreateFromCreature() throws Exception {
         // Arrange
-        Creature creature = new Creature();
+        net.monkeybutts.creature.Creature creature = new net.monkeybutts.creature.Creature();
         creature.parseFile("test.txt");
-        Document doc = CreatureToFGXml.createDocument();
+        Document doc = FGCreatureElement.createDocument();
 
         // Act
-        Element creatureElement = CreatureToFGXml.createFromCreature(doc, creature);
+        Element creatureElement = FGCreatureElement.createFromCreature(doc, creature);
 
         // Assert
-        CreatureToFGXml.prettyPrint(doc);
+        FGCreatureElement.prettyPrint(doc);
     }
 
     @Test
@@ -33,7 +32,7 @@ public class CreatureToFGXmlTest {
                 "mwk spear +16/+11 (1d8+6/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = CreatureToFGXml.getSingleAttack(melee, false);
+        String result = FGCreatureElement.getSingleAttack(melee, false);
 
         // Assert
         assertEquals("+1 lance +18 (1d8+9/×3) or mwk spear +16 (1d8+6/×3)", result);
@@ -46,7 +45,7 @@ public class CreatureToFGXmlTest {
                 "+13/+8 (1d8+3/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = CreatureToFGXml.getSingleAttack(ranged, true);
+        String result = FGCreatureElement.getSingleAttack(ranged, true);
 
         // Assert
         assertEquals("mwk composite longbow +13 ranged (1d8+3/×3)", result);
@@ -59,7 +58,7 @@ public class CreatureToFGXmlTest {
                 "mwk spear +16/+11 (1d8+6/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = CreatureToFGXml.getFullAttack(melee, false);
+        String result = FGCreatureElement.getFullAttack(melee, false);
 
         // Assert
         assertEquals("+1 lance +18/+13 (1d8+9/×3) or mwk spear +16/+11 (1d8+6/×3)", result);
@@ -72,7 +71,7 @@ public class CreatureToFGXmlTest {
                 "+13/+8 (1d8+3/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = CreatureToFGXml.getFullAttack(ranged, true);
+        String result = FGCreatureElement.getFullAttack(ranged, true);
 
         // Assert
         assertEquals("mwk composite longbow +13/+8 ranged (1d8+3/×3)", result);

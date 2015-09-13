@@ -50,6 +50,14 @@ public class Section {
         }
     }
 
+    protected int indexOfLine(String input, int line) {
+        int index = 0;
+        for (int i = 0; i < line; i++) {
+            index = input.indexOf('\n', index+1);
+        }
+        return index + 1;
+    }
+
     protected class TokenIndexList extends ArrayList<TokenIndex> {
         public TokenIndexList add(String input, String token) {
             int index = indexOfToken(input, 0, token);

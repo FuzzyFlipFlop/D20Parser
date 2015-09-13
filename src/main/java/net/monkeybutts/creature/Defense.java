@@ -18,6 +18,8 @@ public class Defense extends Section {
 
     private String armorClass;
     private String hitPoints;
+    private String hitDice;
+
     private String fortitudeSave;
     private String reflexSave;
     private String willSave;
@@ -47,7 +49,9 @@ public class Defense extends Section {
             if ( tokenIndex.getToken().equals(AC)) {
                 armorClass = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(HP)) {
-                hitPoints = getTokenValue(input, tokenIndexes, i);
+                String[] hpSplit = getTokenValue(input, tokenIndexes, i).split(" ");
+                hitPoints = hpSplit[0];
+                hitDice = hpSplit[1].substring(1, hpSplit[1].length() - 1);
             } else if ( tokenIndex.getToken().equals(FORT)) {
                 fortitudeSave = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(REF)) {
@@ -75,6 +79,10 @@ public class Defense extends Section {
 
     public String getHitPoints() {
         return hitPoints;
+    }
+
+    public String getHitDice() {
+        return hitDice;
     }
 
     public String getFortitudeSave() {

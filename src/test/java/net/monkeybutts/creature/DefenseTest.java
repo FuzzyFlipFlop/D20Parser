@@ -21,7 +21,8 @@ public class DefenseTest {
 
 		// ASSERT
 		assertEquals("20, touch 10, flat-footed 19 (+1 Dex, +10 natural, –1 size)", defense.getArmorClass());
-		assertEquals("84 (8d12+32)", defense.getHitPoints());
+		assertEquals("84", defense.getHitPoints());
+		assertEquals("8d12+32", defense.getHitDice());
 		assertEquals("+10", defense.getFortitudeSave());
 		assertEquals("+7", defense.getReflexSave());
 		assertEquals("+5", defense.getWillSave());
