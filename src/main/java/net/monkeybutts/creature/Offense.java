@@ -25,7 +25,7 @@ public class Offense extends Section {
     private String space;
     private String reach;
     private String specialAttacks;
-    private List<SpellSection> spellSectionList;
+    private List<Section> spellSectionList;
 
     public Offense() {
         spellSectionList = new ArrayList<>();
@@ -64,11 +64,17 @@ public class Offense extends Section {
             } else if ( tokenIndex.getToken().equals(SPECIAL_ATTACKS)) {
                 specialAttacks = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(SPELLS0)) {
-                spellSectionList.add(new SpellSection(tokenIndex.getName(), getTokenValue(input, tokenIndexes, i)));
+                SpellLikeAbilitySection section = new SpellLikeAbilitySection();
+                section.parse(getTokenValue(input, tokenIndexes, i));
+                spellSectionList.add(section);
             } else if ( tokenIndex.getToken().equals(SPELLS1)) {
-                spellSectionList.add(new SpellSection(tokenIndex.getName(), getTokenValue(input, tokenIndexes, i)));
+                SpellKnownSection section = new SpellKnownSection();
+                section.parse(getTokenValue(input, tokenIndexes, i));
+                spellSectionList.add(section);
             } else if ( tokenIndex.getToken().equals(SPELLS2)) {
-                spellSectionList.add(new SpellSection(tokenIndex.getName(), getTokenValue(input, tokenIndexes, i)));
+                SpellPreparedSection section = new SpellPreparedSection();
+                section.parse(getTokenValue(input, tokenIndexes, i));
+                spellSectionList.add(section);
             }
         }
     }
@@ -124,23 +130,5 @@ public class Offense extends Section {
 
     public void setSpecialAttacks(String specialAttacks) {
         this.specialAttacks = specialAttacks;
-    }
-
-    protected class SpellSection {
-        private String name;
-        private String text;
-
-        public SpellSection(String name, String text) {
-            this.name = name;
-            this.text = text;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getText() {
-            return text;
-        }
     }
 }
