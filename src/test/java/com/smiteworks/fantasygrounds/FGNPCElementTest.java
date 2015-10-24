@@ -9,20 +9,20 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Stimpyjc on 8/30/2015.
  */
-public class FGCreatureElementTest {
+public class FGNPCElementTest {
 
     @Test
     public void testCreateFromCreature() throws Exception {
         // Arrange
         net.monkeybutts.creature.Creature creature = new net.monkeybutts.creature.Creature();
         creature.parseFile("test.txt");
-        Document doc = FGCreatureElement.createDocument();
+        Document doc = FGNpcElement.createDocument();
 
         // Act
-        Element creatureElement = FGCreatureElement.createFromCreature(doc, creature);
+        Element creatureElement = FGNpcElement.createFromCreature(doc, creature);
 
         // Assert
-        FGCreatureElement.prettyPrint(doc);
+        FGNpcElement.prettyPrint(doc);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class FGCreatureElementTest {
                 "mwk spear +16/+11 (1d8+6/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = FGCreatureElement.getSingleAttack(melee, false);
+        String result = FGNpcElement.getSingleAttack(melee, false);
 
         // Assert
         assertEquals("+1 lance +18 (1d8+9/×3) or mwk spear +16 (1d8+6/×3)", result);
@@ -45,7 +45,7 @@ public class FGCreatureElementTest {
                 "+13/+8 (1d8+3/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = FGCreatureElement.getSingleAttack(ranged, true);
+        String result = FGNpcElement.getSingleAttack(ranged, true);
 
         // Assert
         assertEquals("mwk composite longbow +13 ranged (1d8+3/×3)", result);
@@ -58,7 +58,7 @@ public class FGCreatureElementTest {
                 "mwk spear +16/+11 (1d8+6/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = FGCreatureElement.getFullAttack(melee, false);
+        String result = FGNpcElement.getFullAttack(melee, false);
 
         // Assert
         assertEquals("+1 lance +18/+13 (1d8+9/×3) or mwk spear +16/+11 (1d8+6/×3)", result);
@@ -71,7 +71,7 @@ public class FGCreatureElementTest {
                 "+13/+8 (1d8+3/×3)").replaceAll("\\s+", " ");
 
         // Act
-        String result = FGCreatureElement.getFullAttack(ranged, true);
+        String result = FGNpcElement.getFullAttack(ranged, true);
 
         // Assert
         assertEquals("mwk composite longbow +13/+8 ranged (1d8+3/×3)", result);
