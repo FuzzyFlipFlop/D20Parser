@@ -7,7 +7,8 @@ import org.w3c.dom.Element;
  * Created by Stimpyjc on 10/24/2015.
  */
 public class FGLibraryElement extends FGElement {
-    private static final String ELEMENT_NAME = "library";
+    private static final String REFERENCE_NAME = "library";
+    private static final String CLASS_NAME = "library";
     private static final String ENTRIES_ELEMENT_NAME = "entries";
 
     private static final String LINK_NAME = "librarylink";
@@ -27,12 +28,12 @@ public class FGLibraryElement extends FGElement {
 
     @Override
     public String getClassName() {
-        return "library";
+        return CLASS_NAME;
     }
 
     @Override
     public String getReferenceName() {
-        return "library";
+        return REFERENCE_NAME;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class FGLibraryElement extends FGElement {
 
     @Override
     public Element createElement() {
-        Element element = getDocument().createElement(ELEMENT_NAME);
+        Element element = super.createElement();
 
         element.appendChild(createModuleElement());
 
@@ -66,13 +67,13 @@ public class FGLibraryElement extends FGElement {
         Element element = getDocument().createElement(ENTRIES_ELEMENT_NAME);
 
         for (FGListElement listElement : listsElement.getListElements()) {
-            element.appendChild(createlinkElement(listElement));
+            element.appendChild(createLinkElement(listElement));
         }
 
         return element;
     }
 
-    protected Element createlinkElement(FGListElement element) {
+    protected Element createLinkElement(FGListElement element) {
         Element linkElement = getDocument().createElement(element.getReferenceName());
 
         linkElement.appendChild(createLinkElement(LINK_NAME, LINK_TYPE, element.getClassName(), String.format("%s.%s@%s", listsElement.getReferenceName(), element.getReferenceName(), getName())));

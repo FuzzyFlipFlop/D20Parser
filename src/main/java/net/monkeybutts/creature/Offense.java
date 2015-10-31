@@ -25,7 +25,7 @@ public class Offense extends Section {
     private String space;
     private String reach;
     private String specialAttacks;
-    private List<Section> spellSectionList;
+    private List<SpellSection> spellSectionList;
 
     public Offense() {
         spellSectionList = new ArrayList<>();
@@ -130,5 +130,9 @@ public class Offense extends Section {
 
     public void setSpecialAttacks(String specialAttacks) {
         this.specialAttacks = specialAttacks;
+    }
+
+    public List<SpellSection> getSpellSectionList() {
+        return spellSectionList;
     }
 }

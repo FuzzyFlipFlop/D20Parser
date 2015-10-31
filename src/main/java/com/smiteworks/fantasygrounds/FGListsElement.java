@@ -9,6 +9,10 @@ import java.util.List;
  * Created by Stimpyjc on 10/24/2015.
  */
 public class FGListsElement extends FGElement {
+    private static final String REFERENCE_NAME = "lists";
+    private static final String CLASS_NAME = "lists";
+    private static final String NAME = "lists";
+
     private List<FGListElement> listElements;
 
     public FGListsElement(Document document, List<FGListElement> listElements) {
@@ -23,21 +27,22 @@ public class FGListsElement extends FGElement {
 
     @Override
     public String getClassName() {
-        return "lists";
+        return CLASS_NAME;
     }
 
     @Override
     public String getReferenceName() {
-        return "lists";
+        return REFERENCE_NAME;
     }
 
     @Override
     public String getName() {
-        return "lists";
+        return NAME;
     }
 
     @Override
     public Element createElement() {
-        return null;
+        Element element = super.createElement();
+        return element;
     }
 }

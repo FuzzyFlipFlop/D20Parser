@@ -9,6 +9,7 @@ import java.util.List;
  * Created by Stimpyjc on 10/24/2015.
  */
 public class FGListElement extends FGElement {
+    private static final String CLASS_NAME = "referenceindexsorted";
     private static final String LINK_NAME = "listlink";
     private static final String LINK_TYPE = "windowreference";
 
@@ -29,7 +30,7 @@ public class FGListElement extends FGElement {
     }
 
     public String getClassName() {
-        return "referenceindexsorted";
+        return CLASS_NAME;
     }
 
     public String getReferenceName() {
@@ -42,7 +43,7 @@ public class FGListElement extends FGElement {
 
     @Override
     public Element createElement() {
-        Element element = getDocument().createElement(referenceName);
+        Element element = super.createElement();
 
         element.appendChild(createPropertyElement("name", "string", name));
         element.appendChild(createIndexElement());
@@ -54,13 +55,13 @@ public class FGListElement extends FGElement {
         Element element = getDocument().createElement("index");
 
         for (FGElement listElement : elementList) {
-            element.appendChild(createIndexElement(listElement));
+            element.appendChild(createIndexLinkElement(listElement));
         }
 
         return element;
     }
 
-    protected Element createIndexElement(FGElement element) {
+    protected Element createIndexLinkElement(FGElement element) {
         Element indexElement = getDocument().createElement(element.getReferenceName());
 
         indexElement.appendChild(createLinkElement(LINK_NAME, LINK_TYPE, element.getClassName(), String.format("%s.%s@%s", referenceName, element.getReferenceName(), libraryElement.getName())));
