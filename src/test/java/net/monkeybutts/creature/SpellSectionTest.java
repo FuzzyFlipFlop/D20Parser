@@ -3,6 +3,7 @@ package net.monkeybutts.creature;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -21,9 +22,10 @@ public class SpellSectionTest {
         SpellPreparedSection spellPreparedSection = new SpellPreparedSection();
 
         // Act
-        List<String> result = spellPreparedSection.parseSpells(input);
+        List<Spell> result = spellPreparedSection.parseSpells(input);
 
         // Assert
-        assertThat(result, contains("chain lightning (DC 23)", "disintegrate (DC 24)", "flesh to stone (2, DC 24)", "quickened glitterdust (DC 19)"));
+        List<String> list = result.stream().map(Spell::toString).collect(Collectors.toList());
+        assertThat(list, contains("chain lightning (DC 23)", "disintegrate (DC 24)", "flesh to stone (2, DC 24)", "quickened glitterdust (DC 19)"));
     }
 }

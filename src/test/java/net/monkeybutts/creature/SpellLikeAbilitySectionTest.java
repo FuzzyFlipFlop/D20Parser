@@ -28,9 +28,9 @@ public class SpellLikeAbilitySectionTest  {
         // Assert
         assertEquals("15th", section.getCasterLevel());
         assertEquals("+20", section.getConcentration());
-        assertThat(section.getConstantSpells(), contains("invisibility purge"));
-        assertThat(section.getAtWillSpells(), contains("death knell (DC 17)", "prayer"));
-        assertThat(section.getPerDay3Spells(), contains("demand (DC 23)", "dimensional anchor", "divination", "dominate person (DC 20)", "greater command (DC 20)"));
-        assertThat(section.getPerDay1Spells(), contains("commune", "dream", "unhallow"));
+        assertThat(section.getSpellList(SpellCategory.CONSTANT), contains("invisibility purge"));
+        assertThat(section.getSpellList(SpellCategory.LEVEL0), contains("death knell (DC 17)", "prayer"));
+        assertThat(section.getSpellList(SpellCategory.LEVEL3), contains("demand (DC 23)", "dimensional anchor", "divination", "dominate person (DC 20)", "greater command (DC 20)"));
+        assertThat(section.getSpellList(SpellCategory.LEVEL1), contains("commune", "dream", "unhallow"));
     }
 }

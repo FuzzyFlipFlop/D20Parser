@@ -1,7 +1,6 @@
 package net.monkeybutts.creature;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Stimpyjc on 10/23/2015.
@@ -18,18 +17,6 @@ public class SpellLikeAbilitySection  extends SpellSection {
     private static final String PER_DAY_3 = "3/day -".toUpperCase();
     private static final String PER_DAY_2 = "2/day -".toUpperCase();
     private static final String PER_DAY_1 = "1/day -".toUpperCase();
-
-    private List<String> constantSpells;
-    private List<String> atWillSpells;
-    private List<String> perDay9Spells;
-    private List<String> perDay8Spells;
-    private List<String> perDay7Spells;
-    private List<String> perDay6Spells;
-    private List<String> perDay5Spells;
-    private List<String> perDay4Spells;
-    private List<String> perDay3Spells;
-    private List<String> perDay2Spells;
-    private List<String> perDay1Spells;
 
     public void parse(String input) throws Exception {
         super.parse(input);
@@ -56,27 +43,27 @@ public class SpellLikeAbilitySection  extends SpellSection {
             TokenIndex tokenIndex = tokenIndexes.get(i);
 
             if (tokenIndex.getToken().equals(CONSTANT)) {
-                constantSpells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.CONSTANT, 0, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(AT_WILL)) {
-                atWillSpells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL0, 0, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_9)) {
-                perDay9Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL9, 9, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_8)) {
-                perDay8Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL8, 8, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_7)) {
-                perDay7Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL7, 7, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_6)) {
-                perDay6Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL6, 6, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_5)) {
-                perDay5Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL5, 5, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_4)) {
-                perDay4Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL4, 4, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_3)) {
-                perDay3Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL3, 3, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_2)) {
-                perDay2Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL2, 2, parseSpells(getTokenValue(input, tokenIndexes, i))));
             } else if (tokenIndex.getToken().equals(PER_DAY_1)) {
-                perDay1Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                getSpellCategories().add(new SpellCategory(SpellCategory.LEVEL1, 1, parseSpells(getTokenValue(input, tokenIndexes, i))));
             }
         }
     }
@@ -84,49 +71,5 @@ public class SpellLikeAbilitySection  extends SpellSection {
     @Override
     protected String getTokenValue(String input, TokenIndexList tokenIndexes, int index) {
         return super.getTokenValue(input, tokenIndexes, index).replaceAll("\\s+", " ").trim();
-    }
-
-    public List<String> getConstantSpells() {
-        return constantSpells;
-    }
-
-    public List<String> getAtWillSpells() {
-        return atWillSpells;
-    }
-
-    public List<String> getPerDay9Spells() {
-        return perDay9Spells;
-    }
-
-    public List<String> getPerDay8Spells() {
-        return perDay8Spells;
-    }
-
-    public List<String> getPerDay7Spells() {
-        return perDay7Spells;
-    }
-
-    public List<String> getPerDay6Spells() {
-        return perDay6Spells;
-    }
-
-    public List<String> getPerDay5Spells() {
-        return perDay5Spells;
-    }
-
-    public List<String> getPerDay4Spells() {
-        return perDay4Spells;
-    }
-
-    public List<String> getPerDay3Spells() {
-        return perDay3Spells;
-    }
-
-    public List<String> getPerDay2Spells() {
-        return perDay2Spells;
-    }
-
-    public List<String> getPerDay1Spells() {
-        return perDay1Spells;
     }
 }

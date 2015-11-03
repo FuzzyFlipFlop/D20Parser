@@ -37,20 +37,20 @@ public class SpellKnownSectionTest {
         // Assert
         assertEquals("15th", section.getCasterLevel());
         assertEquals("+25", section.getConcentration());
-        assertEquals(4, section.getLevel7SpellsPerDay());
-        assertThat(section.getLevel7Spells(), contains("greater scrying (DC 22)", "prismatic spray (DC 22)"));
-        assertEquals(6, section.getLevel6SpellsPerDay());
-        assertThat(section.getLevel6Spells(), contains("chain lightning (DC 21)", "contingency", "geas/quest"));
-        assertEquals(7, section.getLevel5SpellsPerDay());
-        assertThat(section.getLevel5Spells(), contains("dominate person (DC 20)", "nightmare (DC 20)", "sending", "teleport"));
-        assertEquals(7, section.getLevel4SpellsPerDay());
-        assertThat(section.getLevel4Spells(), contains("charm monster (DC 19)", "greater invisibility", "phantasmal killer (DC 19)", "wall of ice"));
-        assertEquals(7, section.getLevel3SpellsPerDay());
-        assertThat(section.getLevel3Spells(), contains("dispel magic", "displacement", "gaseous form", "slow (DC 18)"));
-        assertEquals(7, section.getLevel2SpellsPerDay());
-        assertThat(section.getLevel2Spells(), contains("alter self", "command undead (DC 17)", "detect thoughts (DC 17)", "glitterdust (DC 17)", "scorching ray"));
-        assertEquals(8, section.getLevel1SpellsPerDay());
-        assertThat(section.getLevel1Spells(), contains("charm person (DC 16)", "endure elements", "grease (DC 16)", "magic missile", "reduce person (DC 16)"));
-        assertThat(section.getLevel0Spells(), contains("bleed (DC 15)", "detect magic", "light", "mage hand", "message", "open/close", "prestidigitation", "read magic", "touch of fatigue (DC 15)"));
+        assertEquals(4, section.getSpellsPerDay(SpellCategory.LEVEL7));
+        assertThat(section.getSpellList(SpellCategory.LEVEL7), contains("greater scrying (DC 22)", "prismatic spray (DC 22)"));
+        assertEquals(6, section.getSpellsPerDay(SpellCategory.LEVEL6));
+        assertThat(section.getSpellList(SpellCategory.LEVEL6), contains("chain lightning (DC 21)", "contingency", "geas/quest"));
+        assertEquals(7, section.getSpellsPerDay(SpellCategory.LEVEL5));
+        assertThat(section.getSpellList(SpellCategory.LEVEL5), contains("dominate person (DC 20)", "nightmare (DC 20)", "sending", "teleport"));
+        assertEquals(7, section.getSpellsPerDay(SpellCategory.LEVEL4));
+        assertThat(section.getSpellList(SpellCategory.LEVEL4), contains("charm monster (DC 19)", "greater invisibility", "phantasmal killer (DC 19)", "wall of ice"));
+        assertEquals(7, section.getSpellsPerDay(SpellCategory.LEVEL3));
+        assertThat(section.getSpellList(SpellCategory.LEVEL3), contains("dispel magic", "displacement", "gaseous form", "slow (DC 18)"));
+        assertEquals(7, section.getSpellsPerDay(SpellCategory.LEVEL2));
+        assertThat(section.getSpellList(SpellCategory.LEVEL2), contains("alter self", "command undead (DC 17)", "detect thoughts (DC 17)", "glitterdust (DC 17)", "scorching ray"));
+        assertEquals(8, section.getSpellsPerDay(SpellCategory.LEVEL1));
+        assertThat(section.getSpellList(SpellCategory.LEVEL1), contains("charm person (DC 16)", "endure elements", "grease (DC 16)", "magic missile", "reduce person (DC 16)"));
+        assertThat(section.getSpellList(SpellCategory.LEVEL0), contains("bleed (DC 15)", "detect magic", "light", "mage hand", "message", "open/close", "prestidigitation", "read magic", "touch of fatigue (DC 15)"));
     }
 }

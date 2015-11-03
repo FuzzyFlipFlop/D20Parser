@@ -22,16 +22,6 @@ public class SpellPreparedSection extends SpellSection  {
             "ABJURATION", "CONJURATION", "DIVINATION", "ENCHANTMENT", "EVOCATION", "ILLUSION", "NECROMANCY",
             "TRANSMUTATION", "UNIVERSALIST", "DOMAIN"};
 
-    private List<String> level9Spells;
-    private List<String> level8Spells;
-    private List<String> level7Spells;
-    private List<String> level6Spells;
-    private List<String> level5Spells;
-    private List<String> level4Spells;
-    private List<String> level3Spells;
-    private List<String> level2Spells;
-    private List<String> level1Spells;
-    private List<String> level0Spells;
     private String specialization;
 
     public SpellPreparedSection() {
@@ -68,75 +58,45 @@ public class SpellPreparedSection extends SpellSection  {
             TokenIndex tokenIndex = tokenIndexes.get(i);
 
             if (tokenIndex.getToken().equals(LEVEL_9)) {
-                level9Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL9, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_8)) {
-                level8Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL8, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_7)) {
-                level7Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL7, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_6)) {
-                level6Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL6, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_5)) {
-                level5Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL5, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_4)) {
-                level4Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL4, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_3)) {
-                level3Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL3, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_2)) {
-                level2Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL2, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_1)) {
-                level1Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL1, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(LEVEL_0)) {
-                level0Spells = parseSpells(getTokenValue(input, tokenIndexes, i));
+                addSpellCategory(SpellCategory.LEVEL0, parseSpells(getTokenValue(input, tokenIndexes, i)));
             } else if (tokenIndex.getToken().equals(SPECIALIZATION)) {
                 specialization = getTokenValue(input, tokenIndexes, i);
             }
         }
     }
 
+    private void addSpellCategory(String code, List<Spell> spells) {
+        int count = 0;
+        for (Spell spell : spells) {
+            count += spell.getCount();
+        }
+        super.getSpellCategories().add(new SpellCategory(code, count, spells));
+    }
+
+
     @Override
     protected String getTokenValue(String input, TokenIndexList tokenIndexes, int index) {
         return super.getTokenValue(input, tokenIndexes, index).replaceAll("\\s+", " ").trim();
     }
 
-    public List<String> getLevel9Spells() {
-        return level9Spells;
-    }
-
-    public List<String> getLevel8Spells() {
-        return level8Spells;
-    }
-
-    public List<String> getLevel7Spells() {
-        return level7Spells;
-    }
-
-    public List<String> getLevel6Spells() {
-        return level6Spells;
-    }
-
-    public List<String> getLevel5Spells() {
-        return level5Spells;
-    }
-
-    public List<String> getLevel4Spells() {
-        return level4Spells;
-    }
-
-    public List<String> getLevel3Spells() {
-        return level3Spells;
-    }
-
-    public List<String> getLevel2Spells() {
-        return level2Spells;
-    }
-
-    public List<String> getLevel1Spells() {
-        return level1Spells;
-    }
-
-    public List<String> getLevel0Spells() {
-        return level0Spells;
-    }
 
     public String getSpecialization() {
         return specialization;

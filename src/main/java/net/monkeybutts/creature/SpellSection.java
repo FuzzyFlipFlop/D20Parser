@@ -3,8 +3,8 @@ package net.monkeybutts.creature;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Stimpyjc on 10/23/2015.
@@ -15,6 +15,8 @@ public class SpellSection extends Section {
 
     private String casterLevel;
     private String concentration;
+
+    private List<SpellCategory> spellCategories;
 
     public void parse(String input) throws Exception {
         int indexStart = input.indexOf("(");
@@ -49,8 +51,35 @@ public class SpellSection extends Section {
         return concentration;
     }
 
-    protected List<String> parseSpells(String input) {
-        List<String> spells = new ArrayList<>();
+    public List<SpellCategory> getSpellCategories() {
+        return spellCategories;
+    }
+
+    public SpellCategory getSpellCategoryByCode(String code) {
+        Optional<SpellCategory> optional = spellCategories.stream().filter(x -> x.getCode().equals(code)).findFirst();
+        if (optional.isPresent())
+            return optional.get();
+
+        return null;
+    }
+
+    public List<String> getSpellList(String code) throws Exception {
+        SpellCategory spellCategory = getSpellCategoryByCode(code);
+        if (spellCategory == null)
+            throw new Exception(String.format("SpellCategory identified by '%s' was not found.", code));
+
+        return spellCategory.getSpells().stream().map(Spell::toString).collect(Collectors.toList());
+    }
+
+    public int getSpellsPerDay(String code) throws Exception {
+        SpellCategory spellCategory = getSpellCategoryByCode(code);
+        if (spellCategory == null)
+            throw new Exception(String.format("SpellCategory identified by '%s' was not found.", code));
+        return spellCategory.getCount();
+    }
+
+    protected List<Spell> parseSpells(String input) {
+        List<Spell> spells = new ArrayList<>();
         String[] split = input.replaceAll("\\s+", " ").split(",");
 
         String item = "";
@@ -61,7 +90,7 @@ public class SpellSection extends Section {
             int countLeftParenthesis = countChar(item, '(');
             int countRightParenthesis = countChar(item, ')');
             if (countLeftParenthesis == countRightParenthesis) {
-                spells.add(normalizeSpell(item.trim()));
+                spells.add(Spell.createFromString(item.trim()));
                 item = "";
             }
         }
@@ -78,40 +107,5 @@ public class SpellSection extends Section {
         }
 
         return count;
-    }
-
-    private String normalizeSpell(String input) {
-        int indexInfo = input.indexOf("(");
-
-        String spell;
-        String info = "";
-        if (indexInfo > 0) {
-            spell = input.substring(0, indexInfo).trim();
-            info = input.substring(indexInfo+1, input.lastIndexOf(")"));
-        } else
-            spell = input;
-
-        Pattern pattern = Pattern.compile("[a-z]");
-        Matcher matcher = pattern.matcher(spell);
-
-        int index = 0;
-        while(matcher.find()) {
-            index = matcher.start();
-        }
-
-        if (index < spell.length()-1) {
-            String ref = spell.substring(index+1);
-            spell = spell.substring(0, index+1);
-            if (!info.isEmpty())
-                info = ref + ", " + info;
-            else
-                info = ref;
-        }
-
-        String retSpell = spell;
-        if (!info.isEmpty())
-            retSpell += " (" + info + ")";
-
-        return retSpell;
     }
 }
