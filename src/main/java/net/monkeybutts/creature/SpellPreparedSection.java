@@ -45,12 +45,7 @@ public class SpellPreparedSection extends SpellSection  {
         tokenIndexes.add(upperInput, LEVEL_2);
         tokenIndexes.add(upperInput, LEVEL_1);
         tokenIndexes.add(upperInput, LEVEL_0);
-
-        // Look for specialization section
-        TokenIndex index = indexOfToken(upperInput.toUpperCase(), SPECIALIZATION_TOKENS);
-        if (index != null) {
-            tokenIndexes.add(new TokenIndex(SPECIALIZATION, "", indexOfLineBegin(upperInput, index.getIndexStart())));
-        }
+        tokenIndexes.addLineBegin(upperInput, SPECIALIZATION, SPECIALIZATION_TOKENS, true);
 
         Collections.sort(tokenIndexes);
 

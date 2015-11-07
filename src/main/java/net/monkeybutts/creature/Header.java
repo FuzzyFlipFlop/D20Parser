@@ -1,6 +1,8 @@
 package net.monkeybutts.creature;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Stimpyjc on 8/26/2015.
@@ -10,16 +12,24 @@ public class Header extends Section {
     private static final String NAME = "NAME";
     private static final String CR = "CR";
     private static final String XP = "XP";
+    private static final String RCL = "RCL";
     private static final String ALIGNMENT = "ALIGNMENT";
     private static final String TYPE = "TYPE";
     private static final String INITIATIVE = "Init".toUpperCase();
     private static final String SENSES = "Senses".toUpperCase();
     private static final String PERCEPTION = "Perception".toUpperCase();
     private static final String AURA = "Aura".toUpperCase();
+    private static final String[] ALIGNMENTS = {"N", "NG", "NE", "LN", "LG", "LE", "CN", "CG", "CE"};
+
+    private static final String CLASS_LEVEL = "CLASS_LEVEL";
+    private static final String[] CLASSES = {"BARBARIAN", "BARD", "CLERIC", "DRUID", "FIGHTER", "MONK", "PALADIN",
+            "RANGER", "ROGUE", "SORCERER", "WIZARD"};
 
     private String name;
     private String challengeRating;
     private String experience;
+    private String raceClassLevel;
+    private List<String> classes;
     private String alignment;
     private String type;
     private String initiative;
@@ -34,9 +44,18 @@ public class Header extends Section {
         TokenIndexList tokenIndexes = new TokenIndexList();
         tokenIndexes.add(new TokenIndex(NAME, "", 0));
         tokenIndexes.add(upperInput, CR);
-        tokenIndexes.add(upperInput, XP);
-        tokenIndexes.add(new TokenIndex(ALIGNMENT, "", indexOfLine(input, 2)));
-        tokenIndexes.add(new TokenIndex(TYPE, "", input.indexOf(' ',indexOfLine(input, 2))+1));
+        TokenIndex xpToken = indexOfToken(upperInput, XP);
+        tokenIndexes.add(xpToken);
+        TokenIndex token = indexOf(upperInput, xpToken.getIndexEnd() + 1, "\\s+");
+        TokenIndex rclToken = new TokenIndex(RCL, "", token.getIndexEnd());
+        TokenIndex alignmentToken = indexOfToken(upperInput, ALIGNMENT, ALIGNMENTS, false);
+        if (rclToken.getIndexStart() == alignmentToken.getIndexStart())
+            tokenIndexes.add(alignmentToken);
+        else {
+            tokenIndexes.add(rclToken);
+            tokenIndexes.add(alignmentToken);
+        }
+        tokenIndexes.add(new TokenIndex(TYPE, "", alignmentToken.getIndexEnd() + 1));
         tokenIndexes.add(upperInput, INITIATIVE);
         tokenIndexes.add(upperInput, SENSES);
         tokenIndexes.add(upperInput, PERCEPTION);
@@ -53,8 +72,11 @@ public class Header extends Section {
                 challengeRating = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(XP)) {
                 experience = getTokenValue(input, tokenIndexes, i);
+            } else if (tokenIndex.getToken().equals(RCL)) {
+                raceClassLevel = getTokenValue(input, tokenIndexes, i);
+                classes = parseClasses(raceClassLevel);
             } else if ( tokenIndex.getToken().equals(ALIGNMENT)) {
-                alignment = getTokenValue(input, tokenIndexes, i);
+                alignment = tokenIndex.getValue();
             } else if ( tokenIndex.getToken().equals(TYPE)) {
                 type = getTokenValue(input, tokenIndexes, i);
             } else if ( tokenIndex.getToken().equals(INITIATIVE)) {
@@ -67,6 +89,23 @@ public class Header extends Section {
                 aura = getTokenValue(input, tokenIndexes, i);
             }
         }
+    }
+
+    protected List<String> parseClasses(String input) throws Exception {
+        String upperInput = input.replaceAll("[A-Z]", "").toUpperCase();
+
+        String[] split = upperInput.split("/");
+
+        List<String> list = new ArrayList<>();
+
+        for (String item : split) {
+            TokenIndex tokenIndex = indexOfToken(item, CLASS_LEVEL, CLASSES, false);
+
+            if (tokenIndex != null)
+                list.add(tokenIndex.getValue());
+        }
+
+        return list;
     }
 
     @Override
@@ -84,6 +123,10 @@ public class Header extends Section {
 
     public String getExperience() {
         return experience;
+    }
+
+    public List<String> getClasses() {
+        return classes;
     }
 
     public String getAlignment() {

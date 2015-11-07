@@ -32,43 +32,80 @@ public class Section {
         return index + 1;
     }
 
-    protected TokenIndex indexOfToken(String input, String token) {
-        return indexOfToken(input, 0, token);
+    protected TokenIndex indexOfToken(String input, String tokenValue) {
+        return indexOfToken(input, 0, tokenValue, false);
     }
 
-    protected TokenIndex indexOfToken(String input, int startIndex, String token) {
-        Pattern pattern = Pattern.compile(token);
-        Matcher matcher = pattern.matcher(input);
-        if(matcher.find(startIndex)){
-            int indexStart = matcher.start();
-            int indexEnd = matcher.end();
-            // Check to make sure the token is not in the middle of other text (should have whitespace on either side)
-            boolean match = true;
-            if (indexStart > 0) match = Character.isWhitespace(input.charAt(indexStart - 1));
-            if (indexEnd < input.length()-1) match &= Character.isWhitespace(input.charAt(indexEnd));
-
-            // If not a match, find the next occurrence.
-            if (!match) return indexOfToken(input, indexEnd, token);
-            return new TokenIndex(token, matcher.group(), indexStart, indexEnd);
-        }
-
-        return null;
+    protected TokenIndex indexOfToken(String input, String tokenValue, boolean emptyToken) {
+        return indexOfToken(input, 0, tokenValue, emptyToken);
     }
 
-    protected TokenIndex indexOfToken(String input, String[] tokens) {
-        return indexOfToken(input, 0, tokens);
+    protected TokenIndex indexOfToken(String input, int startIndex, String tokenValue, boolean emptyToken) {
+        return indexOfToken(input, startIndex, tokenValue, tokenValue, emptyToken);
     }
 
-    protected TokenIndex indexOfToken(String input, int startIndex, String[] tokens) {
+    protected TokenIndex indexOfToken(String input, String tokenName, String[] tokenValues) {
+        return indexOfToken(input, 0, tokenName, tokenValues, false);
+    }
+
+    protected TokenIndex indexOfToken(String input, String tokenName, String[] tokenValues, boolean emptyToken) {
+        return indexOfToken(input, 0, tokenName, tokenValues, emptyToken);
+    }
+
+    protected TokenIndex indexOfToken(String input, int startIndex, String tokenName, String[] tokenValues, boolean emptyToken) {
         TokenIndex retIndex = null;
 
-        for (String token : tokens) {
-            TokenIndex index = indexOfToken(input, startIndex, token);
+        for (String tokenValue : tokenValues) {
+            TokenIndex index = indexOfToken(input, startIndex, tokenName, tokenValue, emptyToken);
             if ( (retIndex == null) || (index != null && index.getIndexStart() < retIndex.getIndexStart()) )
                 retIndex = index;
         }
 
         return retIndex;
+    }
+
+    protected TokenIndex indexOf(String input, int startIndex, String tokenValue) {
+        return indexOf(input, startIndex, tokenValue, tokenValue, false);
+    }
+
+    protected TokenIndex indexOf(String input, int startIndex, String tokenValue, boolean emptyToken) {
+        return indexOf(input, startIndex, tokenValue, tokenValue, emptyToken);
+    }
+
+    protected TokenIndex indexOf(String input, int startIndex, String tokenName, String tokenValue, boolean emptyToken) {
+        Pattern pattern = Pattern.compile(tokenValue);
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find(startIndex)) {
+            int indexStart = matcher.start();
+            int indexEnd = matcher.end();
+
+            if (!emptyToken)
+                return new TokenIndex(tokenName, matcher.group(), indexStart, indexEnd);
+            else
+                return new TokenIndex(tokenName, "", indexStart);
+        }
+
+        return null;
+    }
+
+    protected TokenIndex indexOfToken(String input, int startIndex, String tokenName, String tokenValue, boolean emptyToken) {
+        TokenIndex tokenIndex = indexOf(input, startIndex, tokenName, tokenValue, emptyToken);
+        if (tokenIndex == null)
+            return null;
+
+        if (!emptyToken) {
+            // Check to make sure the token is not in the middle of other text (should have whitespace on either side)
+            int indexStart = tokenIndex.getIndexStart();
+            int indexEnd = tokenIndex.getIndexEnd();
+            boolean match = true;
+            if (indexStart > 0) match = Character.isWhitespace(input.charAt(indexStart - 1));
+            if (indexEnd < input.length() - 1) match &= Character.isWhitespace(input.charAt(indexEnd));
+
+            // If not a match, find the next occurrence.
+            if (!match) tokenIndex = indexOfToken(input, indexEnd, tokenName, tokenValue, emptyToken);
+        }
+
+        return tokenIndex;
     }
 
     protected int indexOfLineBegin(String input, int index) {
@@ -129,7 +166,23 @@ public class Section {
 
     protected class TokenIndexList extends ArrayList<TokenIndex> {
         public TokenIndexList add(String input, String token) {
-            TokenIndex index = indexOfToken(input, 0, token);
+            return add(input, token, false);
+        }
+
+        public TokenIndexList add(String input, String token, boolean emptyToken) {
+            TokenIndex index = indexOfToken(input, token, emptyToken);
+            if (index == null) return this;
+
+            super.add(index);
+            return this;
+        }
+
+        public TokenIndexList add(String input, String tokenName, String[] tokenValues) {
+            return add(input, tokenName, tokenValues, false);
+        }
+
+        public TokenIndexList add(String input, String tokenName, String[] tokenValues, boolean emptyToken) {
+            TokenIndex index = indexOfToken(input, tokenName, tokenValues, emptyToken);
             if (index == null) return this;
 
             super.add(index);
@@ -137,7 +190,11 @@ public class Section {
         }
 
         public TokenIndexList addLineBegin(String input, String token) {
-            TokenIndex index = indexOfToken(input, 0, token);
+            return addLineBegin(input, token, false);
+        }
+
+        public TokenIndexList addLineBegin(String input, String token, boolean emptyToken) {
+            TokenIndex index = indexOfToken(input, token, emptyToken);
             if (index == null) return this;
 
             // backup to beginning of line
@@ -146,6 +203,28 @@ public class Section {
             String value = input.substring(indexBegin, index.getIndexEnd()).trim();
 
             TokenIndex tokenIndex = new TokenIndex(token, value, indexBegin, index.getIndexEnd());
+            super.add(tokenIndex);
+            return this;
+        }
+
+        public TokenIndexList addLineBegin(String input, String tokenName, String[] tokenValues) {
+            return addLineBegin(input, tokenName, tokenValues, false);
+        }
+
+        public TokenIndexList addLineBegin(String input, String tokenName, String[] tokenValues, boolean emptyToken) {
+            TokenIndex index = indexOfToken(input, tokenName, tokenValues, emptyToken);
+            if (index == null) return this;
+
+            // backup to beginning of line
+            int indexBegin = indexOfLineBegin(input, index.getIndexStart());
+
+            TokenIndex tokenIndex;
+            if (!emptyToken) {
+                String value = input.substring(indexBegin, index.getIndexEnd()).trim();
+                tokenIndex = new TokenIndex(tokenName, value, indexBegin, index.getIndexEnd());
+            } else
+                tokenIndex = new TokenIndex(tokenName, "", indexBegin);
+
             super.add(tokenIndex);
             return this;
         }

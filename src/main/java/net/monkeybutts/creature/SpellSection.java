@@ -16,7 +16,14 @@ public class SpellSection extends Section {
     private String casterLevel;
     private String concentration;
 
+    private String ability;
+    private String abilityModifier;
+
     private List<SpellCategory> spellCategories;
+
+    public SpellSection() {
+        spellCategories = new ArrayList<>();
+    }
 
     public void parse(String input) throws Exception {
         int indexStart = input.indexOf("(");

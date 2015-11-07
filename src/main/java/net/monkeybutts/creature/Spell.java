@@ -92,6 +92,6 @@ public class Spell {
             info += String.format("DC %d", difficultyClass);
         }
 
-        return name + ((!info.isEmpty()) ? String.format("(%s)", info) : "");
+        return name + ((!info.isEmpty()) ? String.format(" (%s)", info) : "");
     }
 }
